@@ -20,6 +20,8 @@ volatile long oldPosition = 0;
 volatile long newPosition;
 
 long positionMain  = -999;
+int rotation=0;
+float old_rot_speed=0;
 
 void setup() 
 {
@@ -32,11 +34,11 @@ void setup()
   pinMode(EN_B,  INPUT_PULLUP); 
   Serial.println("TwoKnobs Encoder Test:");
 }
-float read_speed(int select)
+float read_speed(void)
 {
     //read velocity of selected motor
     //return velocity in rad/s
-    const int Encoder_1_round = 30000; //define number of pulses in one round of encoder
+    const int Encoder_1_round = 44; //define number of pulses in one round of encoder
     currentEncoder = Enc.read();
     
     float rot_speed;           //rotating speed in rad/s
@@ -78,19 +80,46 @@ void loop() {
 //  delay(200);
 //  w(0, 1);
 //   delay(2000);
-long newMain;
-  newMain = Enc.read();
-  if (newMain != positionMain) {
-    Serial.print("Main = ");
-    Serial.print(newMain);
-   Serial.println();
-    positionMain = newMain;
-  }
-  // if a character is sent from the serial monitor,
-  // reset both back to zero.
-  if (Serial.available()) {
-    Serial.read();
-    Serial.println("Reset both knobs to zero");
-    Enc.write(0);
-  }
+//long newMain;
+//  newMain = Enc.read();
+//  if (newMain != positionMain) {
+//    Serial.print("Main = ");
+//    Serial.print(newMain);
+//   Serial.println();
+//    positionMain = newMain;
+//  }
+//  // if a character is sent from the serial monitor,
+//  // reset both back to zero.
+//  if (Serial.available()) {
+//    Serial.read();
+//    Serial.println("Reset both knobs to zero");
+//    Enc.write(0);
+//  }
+w(rotation,1);
+float new_rot_speed;
+new_rot_speed=read_speed();
+if (new_rot_speed != old_rot_speed) {
+Serial.print("Speed = ");
+Serial.print(new_rot_speed);
+Serial.println();
+old_rot_speed = new_rot_speed;
+}
+
+if (Serial.available())
+{
+  Serial.read();
+  Serial.println("Increase ");
+  rotation+=10;
+  if (rotation>255) 
+{
+  rotation = 255;
+}
+Serial.println(rotation);
+}
+
+
+if (Serial.available()==2)
+  rotation=0;
+
+
 }
