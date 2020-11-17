@@ -8,6 +8,19 @@
 
 //Declare encoder function
 Encoder Enc(EN_A, EN_B);
+
+//Time variables
+long previousMillis = 0;
+long currentMillis = 0;
+
+//Encoder variables
+volatile long currentEncoder;
+volatile long previousEncoder = 0;
+volatile long oldPosition = 0;
+volatile long newPosition;
+
+long positionMain  = -999;
+
 void setup() 
 {
   // put your setup code here, to run once:
@@ -17,8 +30,27 @@ void setup()
   pinMode(PWM, OUTPUT);
   pinMode(EN_A, INPUT_PULLUP);
   pinMode(EN_B,  INPUT_PULLUP); 
+  Serial.println("TwoKnobs Encoder Test:");
 }
+float read_speed(int select)
+{
+    //read velocity of selected motor
+    //return velocity in rad/s
+    const int Encoder_1_round = 30000; //define number of pulses in one round of encoder
+    currentEncoder = Enc.read();
+    
+    float rot_speed;           //rotating speed in rad/s
+    const int interval = 1000; //choose interval is 1 second (1000 milliseconds)
+    currentMillis = millis();
 
+    if (currentMillis - previousMillis > interval)
+    {
+        previousMillis = currentMillis;
+        rot_speed = (float)((currentEncoder - previousEncoder) * 2 * PI / Encoder_1_round);
+        previousEncoder = currentEncoder;
+        return rot_speed;
+    }
+}
 void w(int rotation, int direct)
 {
     //Control rotation of motor
@@ -38,15 +70,27 @@ void w(int rotation, int direct)
 
 void loop() {
   // put your main code here, to run repeatedly:
-w(255, 1);
-
-  delay(200);
-  w(0, 1);
-  
-  delay(600);
-  w(255, -1);
-
-  delay(200);
-  w(0, 1);
-   delay(2000);
+//  w(255, 1);
+//  delay(200);
+//  w(0, 1);
+//  delay(600);
+//  w(255, -1);
+//  delay(200);
+//  w(0, 1);
+//   delay(2000);
+long newMain;
+  newMain = Enc.read();
+  if (newMain != positionMain) {
+    Serial.print("Main = ");
+    Serial.print(newMain);
+   Serial.println();
+    positionMain = newMain;
+  }
+  // if a character is sent from the serial monitor,
+  // reset both back to zero.
+  if (Serial.available()) {
+    Serial.read();
+    Serial.println("Reset both knobs to zero");
+    Enc.write(0);
+  }
 }
