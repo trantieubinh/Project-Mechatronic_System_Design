@@ -22,37 +22,39 @@ volatile long newPosition;
 long positionMain  = -999;
 int rotation=0;
 float old_rot_speed=0;
+const int Encoder_1_round = 44; //define number of pulses in one round of encoder
+    
+    
+float rot_speed;           //rotating speed in rad/s
+const int interval = 5; //choose interval is 1 second (1000 milliseconds)
 
 void setup() 
 {
   // put your setup code here, to run once:
-  Serial.begin(9600); //Set the band rate to your Bluetooth module.
+  Serial.begin(57600); //Set the band rate to your Bluetooth module.
   pinMode(IN1, OUTPUT);
   pinMode(IN2, OUTPUT);
   pinMode(PWM, OUTPUT);
   pinMode(EN_A, INPUT_PULLUP);
   pinMode(EN_B,  INPUT_PULLUP); 
-  Serial.println("TwoKnobs Encoder Test:");
+  Serial.println("Speed Test");
 }
-float read_speed(void)
+/*float read_speed(void)
 {
     //read velocity of selected motor
     //return velocity in rad/s
-    const int Encoder_1_round = 44; //define number of pulses in one round of encoder
+  
     currentEncoder = Enc.read();
-    
-    float rot_speed;           //rotating speed in rad/s
-    const int interval = 1000; //choose interval is 1 second (1000 milliseconds)
     currentMillis = millis();
 
-    if (currentMillis - previousMillis > interval)
+    if (currentMillis - previousMillis >= interval)
     {
         previousMillis = currentMillis;
-        rot_speed = (float)((currentEncoder - previousEncoder) * 2 * PI / Encoder_1_round);
+        rot_speed = (float)((currentEncoder - previousEncoder)*100*60/(Encoder_1_round));
         previousEncoder = currentEncoder;
         return rot_speed;
     }
-}
+}*/
 void w(int rotation, int direct)
 {
     //Control rotation of motor
@@ -71,55 +73,32 @@ void w(int rotation, int direct)
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-//  w(255, 1);
-//  delay(200);
-//  w(0, 1);
-//  delay(600);
-//  w(255, -1);
-//  delay(200);
-//  w(0, 1);
-//   delay(2000);
-//long newMain;
-//  newMain = Enc.read();
-//  if (newMain != positionMain) {
-//    Serial.print("Main = ");
-//    Serial.print(newMain);
-//   Serial.println();
-//    positionMain = newMain;
-//  }
-//  // if a character is sent from the serial monitor,
-//  // reset both back to zero.
-//  if (Serial.available()) {
-//    Serial.read();
-//    Serial.println("Reset both knobs to zero");
-//    Enc.write(0);
-//  }
-w(rotation,1);
-float new_rot_speed;
-new_rot_speed=read_speed();
-if (new_rot_speed != old_rot_speed) {
-Serial.print("Speed = ");
-Serial.print(new_rot_speed);
-Serial.println();
-old_rot_speed = new_rot_speed;
-}
+w(255,1);
 
-if (Serial.available())
-{
-  Serial.read();
-  Serial.println("Increase ");
-  rotation+=10;
-  if (rotation>255) 
-{
-  rotation = 255;
-}
-Serial.println(rotation);
-}
+    //read velocity of selected motor
+    //return velocity in rad/s
+  
+    currentEncoder = Enc.read();
+    currentMillis = millis();
 
-
-if (Serial.available()==2)
-  rotation=0;
-
-
+    if (currentMillis - previousMillis >= interval)
+    {
+        previousMillis = currentMillis;
+        rot_speed = (float)((currentEncoder - previousEncoder)*200*60/(Encoder_1_round));
+        previousEncoder = currentEncoder;
+        Serial.print("Speed=\t");
+        Serial.print(rot_speed);
+        Serial.print("\t");
+        Serial.print(millis());
+        Serial.println();
+    }
+//float new_rot_speed;
+//new_rot_speed=read_speed();
+//if (new_rot_speed != old_rot_speed) {
+//Serial.print("Speed=\t");
+//Serial.print(new_rot_speed);
+//Serial.print("\t");
+//Serial.print(millis());
+//Serial.println();
+//old_rot_speed = new_rot_speed;
 }
