@@ -1,7 +1,7 @@
 #include <Servo.h>
 
 Servo myservo;
-int servoPin = 3;       // Khai báo chân điều khiển servo
+int servoPin = 4;       // Khai báo chân điều khiển servo
 
 void setup ()
 {
@@ -12,6 +12,17 @@ void setup ()
 void loop ()
 {
   int servoPos = 0;
-  myservo.write(servoPos);
-  Serial.println(servoPos);
+  for (servoPos = 0; servoPos <= 180; servoPos += 5)
+  {
+    myservo.write(servoPos);
+    Serial.println(myservo.read());
+    //delay(50);
+  }
+
+  for (servoPos = 180; servoPos >= 0; servoPos -= 5)
+  {
+    myservo.write(servoPos);
+    Serial.println(myservo.read());
+    //delay(50);
+  }
 }
