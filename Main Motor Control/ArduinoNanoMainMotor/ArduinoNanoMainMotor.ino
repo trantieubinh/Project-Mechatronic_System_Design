@@ -93,8 +93,8 @@ void w(int rotation, int direct)
   }
   if (rotation == 0)
   {
-    digitalWrite(AIN1, HIGH);
-    digitalWrite(AIN2, HIGH);
+    digitalWrite(AIN1, LOW);
+    digitalWrite(AIN2, LOW);
     analogWrite(PWM, 0);
   }
 }
@@ -127,9 +127,12 @@ int sign_of(float x)
 
 void loop() {
   digitalWrite(STBY, HIGH);
- w(25, 1);
-// delay(2000);
- //delay(5000);
+ w(100, 1);
+ delay(2000);
+     digitalWrite(AIN1, HIGH);
+    digitalWrite(AIN2, HIGH);
+    analogWrite(PWM, 0);
+ delay(5000);
 //control_PID(9000);
   float new_rot_speed;
   new_rot_speed = read_speed();
