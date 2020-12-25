@@ -38,13 +38,13 @@ ISR (SPI_STC_vect)                        // Inerrrput routine function
 
 void loop() {
   // put your main code here, to run repeatedly:
-  float gt1 = analogRead(CB1);
-  float gt2 = analogRead(CB2);
-  float gt3 = analogRead(CB3);
-  float gt4 = analogRead(CB4);
-  float gt5 = analogRead(CB5);
-  float gt6 = analogRead(CB6);
-  float gt7 = analogRead(CB7);
+  float S1 = analogRead(CB1);
+  float S2 = analogRead(CB2);
+  float S3 = analogRead(CB3);
+  float S4 = analogRead(CB4);
+  float S5 = analogRead(CB5);
+  float S6 = analogRead(CB6);
+  float S7 = analogRead(CB7);
 
   // calib sensor
   S1 = 110 + ((950 - 140) / (964 - 150)) * (155 - 150)
