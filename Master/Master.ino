@@ -11,6 +11,7 @@ byte spi_receiver_3;
 
 void setup() {
   Serial.begin(9600);
+  pinMode(SS,OUTPUT);
   pinMode(SS1, OUTPUT);
   pinMode(SS2, OUTPUT);
   pinMode(SS3, OUTPUT);
@@ -24,6 +25,9 @@ void loop() {
   digitalWrite(SS2, LOW);
    spi_receiver_2 = SPI.transfer (65); 
   digitalWrite(SS2, HIGH);
+  digitalWrite(SS3, LOW);
+   spi_receiver_3 = SPI.transfer (110); 
+  digitalWrite(SS3, HIGH);  
   /*digitalWrite(ss1, LOW);
     digitalWrite(ss2, LOW);
     spi_receiver_1 = SPI.transfer ('A');

@@ -7,7 +7,7 @@
 #define servoPin 4
 
 Servo myservo;
-byte spi_receiver=90;
+byte spi_receiver = 90;
 void setup ()
 {
   myservo.attach(servoPin);
@@ -19,25 +19,19 @@ void setup ()
 }
 ISR(SPI_STC_vect)
 {
-   if(SPDR>120)
-   spi_receiver=120;
-   else if(SPDR<60)
-   spi_receiver=60;
-   else
-   spi_receiver=SPDR;
+  if (SPDR > 120)
+    spi_receiver = 120;
+  else if (SPDR < 60)
+    spi_receiver = 60;
+  else
+    spi_receiver = SPDR;
 }
 
 void loop ()
 {
-
-int servoPos=120; //60=<servoPos<=120
-myservo.write(spi_receiver);
-Serial.println(myservo.read());
-Serial.println(SPDR);
-      if (digitalRead(SS) == HIGH)
-    {
-        SPDR = 0;
-    }
-
+  //int servoPos=120; //60=<servoPos<=120
+  myservo.write(spi_receiver);
+  //Serial.println(myservo.read());
+  Serial.println(SPDR);
 
 }
