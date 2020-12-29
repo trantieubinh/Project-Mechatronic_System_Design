@@ -69,4 +69,5 @@ void loop() {
           e = 4;                                                  // xe quẹo trái ... giây rồi đi về đích
     
   float x = SPI.transfer(e);
+  Serial.println(e);
 }
