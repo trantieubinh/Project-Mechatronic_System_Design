@@ -18,6 +18,7 @@ void setup() {
   digitalWrite(SS1, HIGH);
   digitalWrite(SS2, HIGH);
   digitalWrite(SS3, HIGH);
+  SPCR |= _BV(MSTR);
   SPI.begin ();
 }
 
@@ -25,9 +26,14 @@ void loop() {
   digitalWrite(SS2, LOW);
    spi_receiver_2 = SPI.transfer (65); 
   digitalWrite(SS2, HIGH);
+     delay(100);
+
   digitalWrite(SS3, LOW);
    spi_receiver_3 = SPI.transfer (110); 
-  digitalWrite(SS3, HIGH);  
+  digitalWrite(SS3, HIGH);
+     delay(100);
+  
+  
   /*digitalWrite(ss1, LOW);
     digitalWrite(ss2, LOW);
     spi_receiver_1 = SPI.transfer ('A');

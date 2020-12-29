@@ -105,7 +105,7 @@ void control_PID(float u)
 void setup()
 {
   // put your setup code here, to run once:
-  Serial.begin(57600); //Set the band rate to your Bluetooth module.
+  Serial.begin(9600); //Set the band rate to your Bluetooth module.
   pinMode(AIN1, OUTPUT);
   pinMode(AIN2, OUTPUT);
   pinMode(PWM, OUTPUT);
@@ -121,7 +121,7 @@ void setup()
 }
 ISR(SPI_STC_vect)
 {
-     if (SPD R=='A')
+     if (SPDR=='A')
      spi_receiver=4000;
      
      else if  (SPDR==225)
