@@ -28,12 +28,17 @@ void loop() {
 digitalWrite(SS2, LOW);
 spi_receiver_2 = SPI.transfer (sending); 
 digitalWrite(SS2, HIGH);
-
 digitalWrite(SS3, LOW);
-   spi_receiver_3 = SPI.transfer (110); 
+spi_receiver_3 = SPI.transfer (120); 
 digitalWrite(SS3, HIGH);
-     
-  
+delay(1000);
+digitalWrite(SS2, LOW);
+spi_receiver_2 = SPI.transfer (sending); 
+digitalWrite(SS2, HIGH);
+digitalWrite(SS3, LOW);
+spi_receiver_3 = SPI.transfer (60); 
+digitalWrite(SS3, HIGH); 
+delay(1000);
   /*digitalWrite(ss1, LOW);
     digitalWrite(ss2, LOW);
     spi_receiver_1 = SPI.transfer ('A');
