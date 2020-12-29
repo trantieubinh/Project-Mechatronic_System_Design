@@ -1,3 +1,4 @@
+#include <SPI.h>
 #include <PID_v1.h>
 #include <Encoder.h>
 
@@ -7,6 +8,10 @@
 #define B 3 //Encoder B
 #define AIN1 8
 #define AIN2 7
+#define MISO 12
+#define MOSI 11
+#define SCK 13
+#define SS 10
 
 //Declare encoder function
 Encoder Enc(A, B);
@@ -26,7 +31,6 @@ int rotation = 0;
 float old_rot_speed;
 const int Encoder_1_round = 44; //define number of pulses in one round of encoder
 
-
 float rot_speed;           //rotating speed in rad/s
 const int interval = 5; //choose interval is 1 second (1000 milliseconds)
 
@@ -38,6 +42,7 @@ const int K = 13117;
 //Declare PID functions
 PID MainPID(&input, &output, &setpoint, kp, ki, kd, DIRECT);
 
+long spi_receiver;
 void PID_setup(void)
 {
   //PID initial settings
@@ -45,28 +50,12 @@ void PID_setup(void)
   MainPID.SetSampleTime(0.005);
   MainPID.SetOutputLimits(0, 255);
 }
-
-void setup()
-{
-  // put your setup code here, to run once:
-  Serial.begin(57600); //Set the band rate to your Bluetooth module.
-  pinMode(AIN1, OUTPUT);
-  pinMode(AIN2, OUTPUT);
-  pinMode(PWM, OUTPUT);
-  pinMode(STBY, OUTPUT);
-  pinMode(A, INPUT_PULLUP);
-  pinMode(B,  INPUT_PULLUP);
-  Serial.println("Speed Test");
-  PID_setup();
-}
 float read_speed(void)
 {
   //read velocity of selected motor
   //return velocity in rad/s
-
   currentEncoder = Enc.read();
   currentMillis = millis();
-
   if (currentMillis - previousMillis >= interval)
   {
     previousMillis = currentMillis;
@@ -107,54 +96,47 @@ void w(int rotation, int direct)
 void control_PID(float u)
 {
   //control the wheel using PID
-  int u_sign = sign_of(u); //Get sign of rotating velocity of wheels
+  //Get sign of rotating velocity of wheels
   u = abs(u);              //get the absolute value of input speed (because we have the variable u_sign)
   setpoint = u;
   MainPID.Compute();
-  //  //Mapping value
-  //  float M_in_min = 0;
-  //  //M_in_max = 19;
-  //  float M_out_min = 0;
-  //  float M_out_max = 255;
-  //
-  //    //Remapping motors' value
-  //    u1 = (u1 - M_in_min) * (M_out_max - M_out_min) / (M_in_max - M_in_min) + M_out_min;
   w(output, 1);
 }
-int sign_of(float x)
+void setup()
 {
-  if (x >= 0)
-    return 1;
-  else
-    return -1;
-}
-
-void loop() {
+  // put your setup code here, to run once:
+  Serial.begin(57600); //Set the band rate to your Bluetooth module.
+  pinMode(AIN1, OUTPUT);
+  pinMode(AIN2, OUTPUT);
+  pinMode(PWM, OUTPUT);
+  pinMode(STBY, OUTPUT);
+  pinMode(A, INPUT_PULLUP);
+  pinMode(B,  INPUT_PULLUP);
   digitalWrite(STBY, HIGH);
+  pinMode(MISO, OUTPUT);
+  SPCR |= _BV(SPE);  //turn on SPI in slave mode
+  SPCR |= _BV(SPIE); // turn on interrupts
+  SPI.attachInterrupt;
+  PID_setup();
+}
+ISR(SPI_STC_vect)
+{
+     if (SPD R=='A')
+     spi_receiver=4000;
+     
+     else if  (SPDR==225)
+          spi_receiver=6000;
+     
+}
+void loop() 
+{
+  input = read_speed();
+  control_PID(spi_receiver);
+  
+  Serial.println(SPDR);
+      if (digitalRead(SS) == HIGH)
+    {
+        SPDR = 0;
+    }
 
-   //w(255, 1);
-  // delay(2000);
-  // w(0,1);
-  // delay(2000);
-  control_PID(2557);
-//  delay(3000);
-//  control_PID(6000);
-//  delay(3000);
-//  control_PID(12000);
-//  delay(3000);
-//  control_PID(500);
-//  delay(4000);
-//  old_rot_speed = 0;
-
-input = read_speed();;
-  if (input != old_rot_speed)
-  {
-    Serial.print("Speed=\t");
-    Serial.print(input);
-    Serial.print("\t");
-    Serial.print(millis());
-    Serial.println();
-    old_rot_speed = input;
-  }
-  //else Serial.println("no");
 }

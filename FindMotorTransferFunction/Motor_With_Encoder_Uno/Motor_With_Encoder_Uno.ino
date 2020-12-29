@@ -1,10 +1,11 @@
 #include <Encoder.h>
 
-#define IN1 7
-#define IN2 8
+#define IN1 8
+#define IN2 7
 #define PWM 5
 #define EN_A 2
 #define EN_B 3
+#define STBY 4
 
 //Declare encoder function
 Encoder Enc(EN_A, EN_B);
@@ -73,6 +74,7 @@ void w(int rotation, int direct)
 }
 
 void loop() {
+digitalWrite(STBY,HIGH);
 w(255,1);
 
     //read velocity of selected motor
