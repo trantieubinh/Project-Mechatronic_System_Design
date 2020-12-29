@@ -1,45 +1,43 @@
 #include <Servo.h>
+#include <SPI.h>
+#define MISO 12
+#define MOSI 11
+#define SCK 13
+#define SS 10
+#define servoPin 4
 
 Servo myservo;
-int servoPin = 4;       // Khai báo chân điều khiển servo
-
+byte spi_receiver=90;
 void setup ()
 {
   myservo.attach(servoPin);
+  pinMode(MISO, OUTPUT);
+  SPCR |= _BV(SPE);  //turn on SPI in slave mode
+  SPCR |= _BV(SPIE); // turn on interrupts
+  SPI.attachInterrupt;
   Serial.begin(9600);
+}
+ISR(SPI_STC_vect)
+{
+   if(SPDR>120)
+   spi_receiver=120;
+   else if(SPDR<60)
+   spi_receiver=60;
+   else
+   spi_receiver=SPDR;
 }
 
 void loop ()
 {
-//  Serial.println("----");
-//  Serial.print(millis());
-//  Serial.println("----");
-//  int servoPos[19] = {0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180};
 
-//  for (int i=0;i<19;i++)
-//  {
-//    myservo.write(servoPos[i]);
-//    Serial.print(myservo.read());
-//    Serial.print("\t");
-//    Serial.print(millis());
-//    Serial.println();
-//  }
-//  delay(10000);
 int servoPos=120; //60=<servoPos<=120
-myservo.write(servoPos);
+myservo.write(spi_receiver);
 Serial.println(myservo.read());
-/* 
-for (servoPos = 0; servoPos <= 180; servoPos += 5)
-  {
-    myservo.write(servoPos);
-    Serial.println(myservo.read());
-    delay(50);
-  }
+Serial.println(SPDR);
+      if (digitalRead(SS) == HIGH)
+    {
+        SPDR = 0;
+    }
 
-  for (servoPos = 180; servoPos >= 0; servoPos -= 5)
-  {
-    myservo.write(servoPos);
-    Serial.println(myservo.read());
-    delay(50);
- }*/
+
 }
