@@ -32,6 +32,6 @@ void loop ()
   //int servoPos=120; //60=<servoPos<=120
   myservo.write(spi_receiver);
   //Serial.println(myservo.read());
-  Serial.println(SPDR);
+ // Serial.println(SPDR);
 
 }

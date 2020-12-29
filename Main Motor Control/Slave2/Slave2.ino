@@ -42,7 +42,7 @@ const int K = 13117;
 //Declare PID functions
 PID MainPID(&input, &output, &setpoint, kp, ki, kd, DIRECT);
 
-long spi_receiver;
+long spi_receiver=0;
 void PID_setup(void)
 {
   //PID initial settings
@@ -122,21 +122,14 @@ void setup()
 }
 ISR(SPI_STC_vect)
 {
-  if (digitalRead(SS) == LOW)
-  {
-    if (SPDR == 'A')
-      spi_receiver = 4000;
-    else if  (SPDR == 225)
-      spi_receiver = 6000;
-  }
-  else if (digitalRead(SS) == HIGH) SPDR=0;
+  spi_receiver=map(SPDR,0,255,0,3000);
 }
 void loop()
 {
   input = read_speed();
   control_PID(spi_receiver);
 
-  Serial.println(SPDR);
+  //Serial.println(spi_receiver);
   if (digitalRead(SS) == HIGH)
   {
     SPDR = 0;

@@ -1086,3 +1086,4 @@
 2020-12-29 16:03:10,370 [INFO] OpenFileManager:294 - Restore cursor
 2020-12-29 16:19:28,549 [INFO] DbMcusDocs:145 - JSON generation date=Thu Nov 05 23:05:07 ICT 2020 (1604592307)
 2020-12-29 16:19:28,828 [INFO] DbMcusDocs:81 - Found 601 MCUs documents
+2020-12-30 00:02:26,727 [INFO] UtilMem:74 - End SaveConfig() Used Memory: 688425896 Bytes (848297984)
