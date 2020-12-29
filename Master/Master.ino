@@ -23,16 +23,15 @@ void setup() {
 }
 
 void loop() {
-  digitalWrite(SS2, LOW);
-   spi_receiver_2 = SPI.transfer (65); 
-  digitalWrite(SS2, HIGH);
-     delay(100);
+//  digitalWrite(SS2, HIGH);
+//   spi_receiver_2 = SPI.transfer (65); 
+//  digitalWrite(SS2, HIGH);
+//     delay(300);
 
   digitalWrite(SS3, LOW);
    spi_receiver_3 = SPI.transfer (110); 
   digitalWrite(SS3, HIGH);
-     delay(100);
-  
+     delay(300);
   
   /*digitalWrite(ss1, LOW);
     digitalWrite(ss2, LOW);

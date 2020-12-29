@@ -102,6 +102,7 @@ void control_PID(float u)
   MainPID.Compute();
   w(output, 1);
 }
+
 void setup()
 {
   // put your setup code here, to run once:
@@ -121,22 +122,24 @@ void setup()
 }
 ISR(SPI_STC_vect)
 {
-     if (SPDR=='A')
-     spi_receiver=4000;
-     
-     else if  (SPDR==225)
-          spi_receiver=6000;
-     
+  if (digitalRead(SS) == LOW)
+  {
+    if (SPDR == 'A')
+      spi_receiver = 4000;
+    else if  (SPDR == 225)
+      spi_receiver = 6000;
+  }
+  else if (digitalRead(SS) == HIGH) SPDR=0;
 }
-void loop() 
+void loop()
 {
   input = read_speed();
   control_PID(spi_receiver);
-  
+
   Serial.println(SPDR);
-      if (digitalRead(SS) == HIGH)
-    {
-        SPDR = 0;
-    }
+  if (digitalRead(SS) == HIGH)
+  {
+    SPDR = 0;
+  }
 
 }
