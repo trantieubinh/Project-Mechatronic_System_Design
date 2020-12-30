@@ -68,6 +68,5 @@ void loop() {
       else if ((S1+S2+S3+S4+S5+S6+S7) > 100  )                    // gặp giao lộ lần cuối
           e = 4;                                                  // xe quẹo trái ... giây rồi đi về đích
     
-  float x = SPI.transfer(e);
-  Serial.println(e);
+  Serial.println(S1);
 }
