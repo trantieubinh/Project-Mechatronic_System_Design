@@ -11,6 +11,7 @@ byte spi_receiver_3;
 long speedcar;
 byte byteSend=120;
 char command;
+byte buf='A';
 void setup() {
   Serial.begin(9600);
   pinMode(SS, OUTPUT);
@@ -22,6 +23,7 @@ void setup() {
   digitalWrite(SS3, HIGH);
   SPCR |= _BV(MSTR);
   SPI.begin ();
+  Serial.println(buf);
 }
 int sending(long speedcar)
 {
@@ -49,59 +51,27 @@ void sendData(int sending, int slave)
         spi_receiver_2 = SPI.transfer(sending);
         digitalWrite(SS3, HIGH);
         break;
-
       }
   }
 }
 
 
 void loop() {
+     digitalWrite(SS1, LOW);    
+  buf = SPI.transfer (0);
+         digitalWrite(SS1, HIGH);    
+    if(buf!='A')
+    Serial.println(buf);
 //  sendData(70,2);
+//  delay(4000);
+//  sendData(0,2);
 //  delay(1000);
-  if (Serial.available() > 0)
-  {
-    sendData(90, 3);
-    command = Serial.read();
-    switch (command)
-    {
-      case '0': speedcar = 500; break;
-      case '1': speedcar = 700; break;
-      case '2': speedcar = 800; break;
-      case '3': speedcar = 900; break;
-      case '4': speedcar = 1000; break;
-      case '5': speedcar = 1200; break;
-      case '6': speedcar = 1500; break;
-      case '7': speedcar = 3500; break;
-      case '8': speedcar = 3700; break;
-      case '9': speedcar = 3900; break;
-      case 'q': speedcar = 4000; break;
-      
-    }
-    byteSend = 70;//sending(speedcar);
-    switch (command)
-    {
-      case 'F':
-        sendData(byteSend, 2);
-        sendData(90, 3);
-        break;
-      case 'R'://right
-        sendData(140, 3);
-        break;
-      case 'L'://left
-        sendData(40, 3);
-        break;
-      case 'I'://go right
-        sendData(byteSend, 2);
-        sendData(140, 3);
-        break;
-      case 'G': //go left
-        sendData(byteSend, 2);
-        sendData(40, 3);
-        break;
-      case 'S'://stop
-        sendData(0, 2);
-        sendData(90, 3);
-        break;
-    }
-  }
+//  sendData(70,2);
+//  delay(100);
+//  sendData(140,3);
+//  delay(100);
+//  sendData(90,3);
+//  delay(3000);
+//  
+
 }
