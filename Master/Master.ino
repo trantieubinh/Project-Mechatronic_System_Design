@@ -8,8 +8,8 @@
 byte spi_receiver_1;
 byte spi_receiver_2;
 byte spi_receiver_3;
-long speedcar = 2000;
-int byteSend;
+long speedcar;
+byte byteSend=120;
 char command;
 void setup() {
   Serial.begin(9600);
@@ -56,25 +56,28 @@ void sendData(int sending, int slave)
 
 
 void loop() {
+//  sendData(70,2);
+//  delay(1000);
   if (Serial.available() > 0)
   {
     sendData(90, 3);
     command = Serial.read();
     switch (command)
     {
-      case '0': speedcar = 1000; break;
-      case '1': speedcar = 1500; break;
-      case '2': speedcar = 2000; break;
-      case '3': speedcar = 2500; break;
-      case '4': speedcar = 3000; break;
-      case '5': speedcar = 3100; break;
-      case '6': speedcar = 3200; break;
+      case '0': speedcar = 500; break;
+      case '1': speedcar = 700; break;
+      case '2': speedcar = 800; break;
+      case '3': speedcar = 900; break;
+      case '4': speedcar = 1000; break;
+      case '5': speedcar = 1200; break;
+      case '6': speedcar = 1500; break;
       case '7': speedcar = 3500; break;
       case '8': speedcar = 3700; break;
       case '9': speedcar = 3900; break;
       case 'q': speedcar = 4000; break;
-        byteSend = sending(speedcar);
+      
     }
+    byteSend = 70;//sending(speedcar);
     switch (command)
     {
       case 'F':
@@ -82,25 +85,23 @@ void loop() {
         sendData(90, 3);
         break;
       case 'R'://right
-        sendData(120, 3);
+        sendData(140, 3);
         break;
       case 'L'://left
-        sendData(60, 3);
+        sendData(40, 3);
         break;
       case 'I'://go right
         sendData(byteSend, 2);
-        sendData(120, 3);
+        sendData(140, 3);
         break;
       case 'G': //go left
         sendData(byteSend, 2);
-        sendData(60, 3);
+        sendData(40, 3);
         break;
       case 'S'://stop
         sendData(0, 2);
         sendData(90, 3);
         break;
     }
-
   }
-
 }

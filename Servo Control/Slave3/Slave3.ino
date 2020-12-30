@@ -19,10 +19,10 @@ void setup ()
 }
 ISR(SPI_STC_vect)
 {
-  if (SPDR > 120)
-    spi_receiver = 120;
-  else if (SPDR < 60)
-    spi_receiver = 60;
+  if (SPDR > 140)
+    spi_receiver = 140;
+  else if (SPDR < 40)
+    spi_receiver = 40;
   else
     spi_receiver = SPDR;
 }
